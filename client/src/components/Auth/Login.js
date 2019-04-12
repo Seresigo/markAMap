@@ -1,22 +1,32 @@
 import React from 'react'
 import GoogleLogin from 'react-google-login'
 import { withStyles } from '@material-ui/core/styles'
-import { from } from 'apollo-link'
+import { GraphQLClient } from 'graphql-request'
 // import Typography from "@material-ui/core/Typography";
 
-const Login = ({ classes }) => {
-  const onSuccess = googleUser => {
-    const idToken = googleUser.getAuthResponse().id_token
-    console.log('------------------{idToken}------------------', { idToken })
+const ME_QUERY = `{
+  me {
+    _id
+    name
+    email
+    picture
   }
+}`
 
-  const onFailure = user => console.log('------------------user------------------', user)
+const Login = ({ classes }) => {
+  const onSuccess = async googleUser => {
+    const idToken = googleUser.getAuthResponse().id_token
+    const client = new GraphQLClient('https://localhost:4000/graphql', {
+      headers: { authorization: idToken },
+    })
+    const data = await client.request(ME_QUERY)
+    console.log('------------------data------------------', data)
+  }
 
   return (
     <GoogleLogin
       clientId="156026607675-ipvimjv3k98moqhj2lg4gsp0ctd17tqm.apps.googleusercontent.com"
       onSuccess={onSuccess}
-      onFailure={onFailure}
       isSignedIn={true}
     />
   )

@@ -1,4 +1,4 @@
-const mogoose = require('mongoose')
+const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -6,4 +6,4 @@ const userSchema = new mongoose.Schema({
   picture: String,
 })
 
-mosule.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema)
