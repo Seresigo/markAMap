@@ -8,15 +8,15 @@ const user = {
 }
 
 const authenticated = next => (root, args, ctx, info) => {
-  if (!ctx.currentUser) {
+  if (ctx.currentUser) {
     throw new AuthenticationError('You must be logged in')
   }
-
+  console.log('------------------ctx------------------', ctx)
   return next(root, args, ctx, info)
 }
 
 module.exports = {
   Query: {
-    me: authenticated((root, args, ctx, info) => ctx.currentUser),
+    me: authenticated((root, args, ctx) => ctx.currentUser),
   },
 }
